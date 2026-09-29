@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TypeBolt — Free Typing Speed Test | WPM, Accuracy & Job Benchmarks</title>
+<meta name="description" content="TypeBolt is a free online typing speed test with live WPM, accuracy %, error tracking, job benchmarks, weak-key drills, a shareable certificate card and personal progress history. No signup.">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { background:#0B0E1A; color:#F8FAFC; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .font-mono2 { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  .stage-glow { box-shadow: 0 0 0 1px rgba(253,224,71,.14), 0 0 42px rgba(253,224,71,.07), 0 24px 60px rgba(0,0,0,.55); }
+  .hud-card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); }
+  #passage { line-height:2.05; }
+  #passage::-webkit-scrollbar { width:6px; }
+  #passage::-webkit-scrollbar-thumb { background:#334155; border-radius:6px; }
+  .tc { padding:0 .5px; border-radius:4px; white-space:pre-wrap; }
+  .tc-pending { color:#475569; }
+  .tc-correct { color:#F8FAFC; }
+  .tc-wrong { color:#F87171; background:rgba(248,113,113,.16); }
+  .tc-current { box-shadow: inset 0 -3px 0 #67E8F9; animation: caretBlink 1.1s steps(1) infinite; }
+  @keyframes caretBlink { 0%,100% { box-shadow: inset 0 -3px 0 #67E8F9; } 50% { box-shadow: inset 0 -3px 0 transparent; } }
+  .dur-btn.active { background:#FDE047; color:#0B0E1A; border-color:#FDE047; }
+  .faq-a { display:none; }
+  .faq-item.open .faq-a { display:block; }
+  .faq-item.open .faq-chev { transform:rotate(180deg); }
+  .kbd { display:inline-flex; align-items:center; justify-content:center; min-width:2rem; height:2rem; padding:0 .5rem; border-radius:.5rem; border:1px solid rgba(255,255,255,.18); border-bottom-width:3px; background:#1E293B; font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.85rem; }
+  @media print { .no-print { display:none !important; } }
+  .cert-stripe { background: repeating-linear-gradient(135deg, #FDE047 0 14px, #0B0E1A 14px 28px); }
+</style>
+</head>
+<body id="top" class="min-h-screen antialiased">
+
+<!-- ================= STICKY HEADER ================= -->
+<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(11,14,26,.92); backdrop-filter:blur(10px);">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 h-14 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-2">
+      <span class="font-mono2 font-extrabold text-xl tracking-tight text-[#FDE047]">&#9889;TypeBolt</span>
+    </a>
+    <nav class="flex items-center gap-5 text-sm">
+      <a href="#top" class="text-slate-300 hover:text-[#FDE047] transition-colors">Home</a>
+      <a href="https://fixoraa.tech" class="text-slate-300 hover:text-[#FDE047] transition-colors">More Tools</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= TOP AD ================= -->
+<div class="no-print mx-auto max-w-6xl px-4 sm:px-6 pt-4" role="complementary" aria-label="Advertisement">
+  <div class="mx-auto text-center" style="max-width:728px">
+    <span class="block text-[10px] tracking-[0.18em] uppercase text-slate-400 mb-1.5">Advertisement</span>
+    <div class="flex justify-center overflow-hidden">
+      <div class="origin-top scale-[0.44] sm:scale-100 shrink-0">
+        <script>
+          atOptions = { 'key' : '4e68ac77881c17fe128a46565d9a4e8c', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+        </script>
+        <script src="https://www.highrevenueformat.com/4e68ac77881c17fe128a46565d9a4e8c/invoke.js"></script>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MAIN TOOL ================= -->
+<main class="mx-auto max-w-6xl px-4 sm:px-6 pb-6">
+  <div class="pt-6 pb-4 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FDE047]/40 bg-[#FDE047]/10 text-[#FDE047] text-xs font-semibold tracking-wide uppercase mb-3">
+      <span class="w-1.5 h-1.5 rounded-full bg-[#FDE047] animate-pulse"></span> Unlimited Free Usage
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Typing Speed Test <span class="text-[#FDE047]">&#9889;</span></h1>
+    <p class="mt-2 text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">Type the passage. Get live WPM, accuracy and error counts — then see which jobs your speed qualifies for, drill your weakest keys, and grab a shareable certificate.</p>
+  </div>
+
+  <!-- Config bar -->
+  <div class="no-print flex flex-wrap items-center justify-center gap-3 mb-4">
+    <div class="flex items-center gap-2" role="group" aria-label="Test duration">
+      <span class="text-xs uppercase tracking-widest text-slate-500">Duration</span>
+      <button class="dur-btn active font-mono2 text-sm px-3.5 py-1.5 rounded-lg border border-white/15 hover:border-[#FDE047]/60 transition-colors" data-dur="30">30s</button>
+      <button class="dur-btn font-mono2 text-sm px-3.5 py-1.5 rounded-lg border border-white/15 hover:border-[#FDE047]/60 transition-colors" data-dur="60">1 min</button>
+      <button class="dur-btn font-mono2 text-sm px-3.5 py-1.5 rounded-lg border border-white/15 hover:border-[#FDE047]/60 transition-colors" data-dur="180">3 min</button>
+    </div>
+    <button id="restartBtn" class="font-mono2 text-sm px-3.5 py-1.5 rounded-lg bg-[#FDE047] text-[#0B0E1A] font-bold hover:brightness-110 transition" title="Restart (Tab + Enter)">&#10227; Restart <span class="hidden sm:inline text-[10px] opacity-70 font-normal">(Tab+Enter)</span></button>
+  </div>
+  <p class="no-print text-center text-[11px] text-slate-500 mb-4 -mt-2">&#128250; Tip: a physical keyboard gives the most accurate results — touch typing works, but your scores may vary on mobile.</p>
+
+  <!-- ================= TEST STAGE ================= -->
+  <section id="stage" class="stage-glow rounded-2xl bg-[#10142A] p-4 sm:p-6 mb-6">
+    <!-- HUD -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <div class="hud-card rounded-xl px-4 py-3 text-center">
+        <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">WPM</div>
+        <div id="hudWpm" class="font-mono2 text-3xl font-extrabold text-[#FDE047]">0</div>
+      </div>
+      <div class="hud-card rounded-xl px-4 py-3 text-center">
+        <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">Accuracy</div>
+        <div id="hudAcc" class="font-mono2 text-3xl font-extrabold text-[#67E8F9]">100<span class="text-sm">%</span></div>
+      </div>
+      <div class="hud-card rounded-xl px-4 py-3 text-center">
+        <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">Timer</div>
+        <div id="hudTimer" class="font-mono2 text-3xl font-extrabold">0:30</div>
+      </div>
+      <div class="hud-card rounded-xl px-4 py-3 text-center">
+        <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">Errors</div>
+        <div id="hudErr" class="font-mono2 text-3xl font-extrabold text-red-400">0</div>
+      </div>
+    </div>
+
+    <!-- Passage area -->
+    <div id="passageWrap" class="relative rounded-xl bg-[#0B0E1A] border border-white/10 p-4 sm:p-6 cursor-text" role="textbox" aria-label="Typing passage. Click and start typing." tabindex="0">
+      <div id="passage" class="font-mono2 text-lg sm:text-xl max-h-56 overflow-y-auto select-none" aria-hidden="true"></div>
+      <input id="focusInput" class="absolute opacity-0 pointer-events-none" style="width:1px;height:1px;top:0;left:0;" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Typing input">
+      <div id="focusOverlay" class="absolute inset-0 rounded-xl flex items-center justify-center bg-[#0B0E1A]/70 backdrop-blur-[1px] transition-opacity">
+        <div class="text-center">
+          <div class="text-[#FDE047] font-bold text-lg mb-1">&#9889; Click here, then start typing</div>
+          <div class="text-slate-400 text-sm">The timer starts on your first keystroke</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live graph -->
+    <div class="mt-4">
+      <div class="flex items-center justify-between mb-1.5">
+        <span class="text-[10px] uppercase tracking-[0.2em] text-slate-500">Live speed graph</span>
+        <span id="liveLabel" class="font-mono2 text-[11px] text-slate-500">WPM over time</span>
+      </div>
+      <div id="liveGraph" class="rounded-xl bg-[#0B0E1A] border border-white/10 p-2"></div>
+    </div>
+  </section>
+</main>
+
+<main class="mx-auto max-w-6xl px-4 sm:px-6 pb-10">
+  <!-- ================= RESULTS PANEL ================= -->
+  <section id="resultsPanel" class="hidden rounded-2xl bg-[#10142A] border border-[#FDE047]/25 p-4 sm:p-8 mb-8">
+    <div class="text-center mb-6">
+      <div class="text-[11px] uppercase tracking-[0.25em] text-[#67E8F9] mb-1" id="resModeLabel">Test complete</div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold">Your Result</h2>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6 text-center">
+      <div class="hud-card rounded-xl p-4">
+        <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">WPM</div>
+        <div id="resWpm" class="font-mono2 text-4xl font-extrabold text-[#FDE047]">0</div>
+      </div>
+      <div class="hud-card rounded-xl p-4">
+        <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">Accuracy</div>
+        <div id="resAcc" class="font-mono2 text-4xl font-extrabold text-[#67E8F9]">0%</div>
+      </div>
+      <div class="hud-card rounded-xl p-4">
+        <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">Errors</div>
+        <div id="resErr" class="font-mono2 text-4xl font-extrabold text-red-400">0</div>
+      </div>
+      <div class="hud-card rounded-xl p-4">
+        <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">Time</div>
+        <div id="resTime" class="font-mono2 text-4xl font-extrabold">0s</div>
+      </div>
+      <div class="hud-card rounded-xl p-4 col-span-2 sm:col-span-1">
+        <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">Consistency</div>
+        <div id="resCons" class="font-mono2 text-4xl font-extrabold text-emerald-300">0%</div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1.5">WPM over time</div>
+      <div id="resGraph" class="rounded-xl bg-[#0B0E1A] border border-white/10 p-2"></div>
+    </div>
+
+    <!-- Job benchmarks -->
+    <div class="mb-8">
+      <h3 class="text-xl font-bold mb-1">&#127942; Job Benchmarks</h3>
+      <p class="text-sm text-slate-400 mb-3">How your speed stacks up against real typing-speed requirements from job postings. Accuracy matters — you must clear <em>both</em> bars.</p>
+      <div id="jobsVerdict" class="rounded-xl px-4 py-3 mb-3 text-sm font-semibold"></div>
+      <div class="overflow-x-auto rounded-xl border border-white/10">
+        <table class="w-full text-sm min-w-[560px]">
+          <thead>
+            <tr class="bg-white/5 text-left text-[11px] uppercase tracking-widest text-slate-400">
+              <th class="px-4 py-3">Job</th>
+              <th class="px-4 py-3">Required</th>
+              <th class="px-4 py-3">You</th>
+              <th class="px-4 py-3">Verdict</th>
+            </tr>
+          </thead>
+          <tbody id="jobsTable"></tbody>
+        </table>
+      </div>
+      <p class="text-[11px] text-slate-500 mt-2">Benchmarks compiled from publicly listed employer requirements (data entry, clerk-typist exams, medical &amp; legal transcription postings). For self-assessment only — not an official certification.</p>
+    </div>
+
+    <!-- Weak keys -->
+    <div class="mb-8">
+      <h3 class="text-xl font-bold mb-1">&#127919; Weak-Key Report</h3>
+      <p class="text-sm text-slate-400 mb-3">The keys you mistyped most in this run. Hit the drill button to practice a round built only from words containing those keys.</p>
+      <div id="weakKeysList" class="flex flex-wrap gap-3 mb-4"></div>
+      <button id="drillBtn" class="no-print font-mono2 text-sm px-4 py-2 rounded-lg border border-[#67E8F9]/60 text-[#67E8F9] hover:bg-[#67E8F9]/10 transition font-semibold">&#9889; Start targeted drill (30s)</button>
+    </div>
+
+    <!-- Certificate -->
+    <div class="mb-8">
+      <h3 class="text-xl font-bold mb-1">&#127891; Shareable Result Card</h3>
+      <p class="text-sm text-slate-400 mb-3">Add your name, download a certificate-style PNG for resumes and job applications, or copy the result as text.</p>
+      <div class="grid md:grid-cols-[1fr_1.4fr] gap-4 items-start">
+        <div class="no-print">
+          <label for="certName" class="block text-xs uppercase tracking-widest text-slate-500 mb-1.5">Your name</label>
+          <input id="certName" type="text" maxlength="40" placeholder="e.g. Alex Morgan" class="w-full rounded-lg bg-[#0B0E1A] border border-white/15 px-3 py-2.5 text-sm focus:outline-none focus:border-[#FDE047]/70 mb-3">
+          <div class="flex flex-wrap gap-2">
+            <button id="certDownload" class="font-mono2 text-sm px-4 py-2 rounded-lg bg-[#FDE047] text-[#0B0E1A] font-bold hover:brightness-110 transition">&#8681; Download PNG</button>
+            <button id="certCopy" class="font-mono2 text-sm px-4 py-2 rounded-lg border border-white/20 hover:border-[#FDE047]/60 transition">Copy result text</button>
+          </div>
+          <p id="certMsg" class="text-xs text-emerald-300 mt-2 h-4"></p>
+        </div>
+        <div>
+          <div class="cert-stripe h-2 rounded-t-xl"></div>
+          <div class="rounded-b-xl bg-[#0B0E1A] border border-t-0 border-[#FDE047]/30 p-6 text-center">
+            <div class="font-mono2 text-[#FDE047] font-extrabold tracking-tight text-lg mb-1">&#9889; TypeBolt</div>
+            <div class="text-[10px] uppercase tracking-[0.3em] text-slate-500 mb-3">Typing Speed Certificate</div>
+            <div class="text-2xl font-bold mb-1" id="certCardName">Your Name</div>
+            <div class="font-mono2 text-sm text-slate-400 mb-4" id="certCardDate"></div>
+            <div class="flex justify-center gap-6 mb-3">
+              <div><div class="font-mono2 text-3xl font-extrabold text-[#FDE047]" id="certCardWpm">0</div><div class="text-[10px] uppercase tracking-widest text-slate-500">WPM</div></div>
+              <div><div class="font-mono2 text-3xl font-extrabold text-[#67E8F9]" id="certCardAcc">0%</div><div class="text-[10px] uppercase tracking-widest text-slate-500">Accuracy</div></div>
+            </div>
+            <div class="text-[10px] text-slate-600">For practice &amp; self-assessment · typebolt test</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div>
+      <h3 class="text-xl font-bold mb-1">&#128202; Your Progress</h3>
+      <p class="text-sm text-slate-400 mb-3">Every completed test is saved in this browser only. Watch your WPM trend climb.</p>
+      <div id="historyGraph" class="rounded-xl bg-[#0B0E1A] border border-white/10 p-2 mb-3"></div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs uppercase tracking-widest text-slate-500">Recent attempts</span>
+        <button id="historyClear" class="no-print text-xs text-red-300/80 hover:text-red-300 border border-red-400/30 rounded-lg px-2.5 py-1">Clear history</button>
+      </div>
+      <div id="historyTable" class="text-sm"></div>
+    </div>
+  </section>
+
+  <!-- ================= BOTTOM AD ================= -->
+  <div class="no-print mx-auto max-w-6xl px-4 sm:px-6 pb-4" role="complementary" aria-label="Advertisement">
+    <div class="mx-auto text-center" style="max-width:728px">
+      <span class="block text-[10px] tracking-[0.18em] uppercase text-slate-400 mb-1.5">Advertisement</span>
+      <div class="flex justify-center overflow-hidden">
+        <script async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="464498"></script>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SEO ARTICLE ================= -->
+  <article id="seo-article" class="max-w-4xl mx-auto prose-slate">
+    <h2 class="text-2xl sm:text-3xl font-extrabold mb-4">Typing Speed Test: The Complete Guide to Measuring and Improving Your WPM</h2>
+
+    <p class="text-slate-300 leading-relaxed mb-4">A typing speed test is the simplest honest mirror your keyboard skills will ever get. You sit down, type a passage against the clock, and within a minute or two you have a number — your words per minute, or WPM — plus an accuracy percentage that tells you how much of that speed was actually usable. Almost everyone has taken one at some point: a job application that asks for 50 WPM, a teacher recommending a practice site, or pure curiosity after watching someone type at what looks like the speed of thought. Yet very few people understand what the number means, how it is calculated, and — most importantly — how to move it upward in a way that survives contact with real work.</p>
+
+    <p class="text-slate-300 leading-relaxed mb-4">The average adult types somewhere between 40 and 60 words per minute. That range covers the casual typist who looks at the keyboard, the office worker who has picked up a decent rhythm over the years, and the student who grew up messaging on a phone. Professional typists — people who type for a living as transcriptionists, data entry operators, or live captioners — usually sit between 65 and 90 WPM, and the elite competitive typists you see in racing videos push past 120 WPM. These numbers are worth keeping in mind before you judge your own score too harshly. If you land at 45 WPM on your first attempt, you are not behind; you are exactly where most of the world is. The good news is that typing is one of the few skills where deliberate practice reliably produces measurable gains within weeks, not years.</p>
+
+    <h3 class="text-xl font-bold mt-8 mb-3">How WPM is actually calculated</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">There is a surprisingly common myth that words per minute counts the dictionary words you type. It does not — that would make scores depend on whether the passage happened to contain short words like "a" and "to" or long ones like "internationalization." Instead, every serious typing test uses a standardized unit: one "word" equals five characters, including spaces and punctuation. Your WPM is computed as the number of correctly typed characters divided by five, divided by the number of minutes you typed. Type 300 correct characters in exactly one minute and you score 60 WPM, regardless of whether those characters formed 50 short words or 40 long ones.</p>
+    <p class="text-slate-300 leading-relaxed mb-4">This standard matters because it makes scores comparable across different passages, different websites, and different days. When an employer asks for 60 WPM, they are asking for 300 correct characters per minute under this definition. Some tests report "gross WPM," which counts everything you typed, errors included. The more meaningful number is "net WPM," which only counts correctly typed characters — and that is the number TypeBolt reports. A test that lets you inflate your score with sloppy, error-ridden speed is not doing you any favors; the accuracy figure exists precisely to keep the speed figure honest.</p>
+
+    <h3 class="text-xl font-bold mt-8 mb-3">Why accuracy is the number that decides everything</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">Beginners almost always obsess over speed. Experienced typists obsess over accuracy, because they have learned the arithmetic of mistakes. Every error costs you twice: once for the wrong keystroke, and once for the time you spend noticing it, hitting backspace, and retyping. At 98% accuracy, errors are rare interruptions. At 88% accuracy, roughly one keystroke in eight is wrong, and the constant stopping and correcting makes your effective output slower than someone typing "only" 50 WPM at 99% accuracy. This is why the accuracy thresholds in real job requirements are so strict — data entry postings commonly demand 95% or better, and verbatim transcription work asks for 98% — and why typing coaches repeat the same advice: accuracy first, speed follows. Speed is a byproduct of clean technique, not the other way around.</p>
+    <p class="text-slate-300 leading-relaxed mb-4">There is also a second, subtler reason accuracy matters: it is what makes your practice transfer to real work. Typing a passage slowly and perfectly is a different motor pattern from hammering keys fast and fixing half of them. The TypeBolt test counts every keystroke you make, including the ones you immediately correct with backspace, so your accuracy score reflects your true typing behavior rather than a cleaned-up version of it. If your accuracy is below 92%, slow down deliberately for a week of practice. You will feel slower; you will actually be building the foundation that lets you go faster later.</p>
+
+    <h3 class="text-xl font-bold mt-8 mb-3">What employers actually require (and why we built job benchmarks)</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">Typing speed is one of the few skills where job postings state a hard number, so it pays to know where the bars are set. Data entry clerk positions typically ask for 40 to 60 WPM at 95% accuracy or better — the accuracy bar is the part most applicants underestimate. Clerk-typist and government office exams commonly test between 50 and 65 WPM on a timed test. Virtual assistant and administrative postings cluster around 50 WPM. Transcription is where the numbers climb: medical transcription usually requires at least 60 WPM at very high accuracy, legal and investigative transcription postings frequently set the bar at 70 WPM, and subtitlers and live captioners work in the 60 to 80 WPM range. Court reporters are a special case entirely — they use stenotype machines, not QWERTY keyboards, so their triple-digit speeds do not translate to a standard typing test.</p>
+    <p class="text-slate-300 leading-relaxed mb-4">These benchmarks explain the job-benchmark mode on this page. Instead of giving you a bare WPM number and leaving you to wonder what it is worth, TypeBolt grades your result against six real-world job profiles and tells you, plainly, which ones you clear and which ones need more work. It is a self-assessment, not an official certificate — no employer should accept a self-administered online test as proof of skill, and you should treat any site that claims otherwise with suspicion. But as a training target it is far more motivating than an abstract number. "I need 3 more WPM and 2% more accuracy to clear the transcriptionist bar" is a goal you can plan a week of practice around.</p>
+
+    <h3 class="text-xl font-bold mt-8 mb-3">How to improve your typing speed: the method that actually works</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">Every typing coach and every research-backed program converges on the same core advice, and it is worth stating in full because the internet is full of shortcuts that do not work. First, learn touch typing properly if you have not already: all ten fingers, home row as the base camp, eyes on the screen and not on the keyboard. Hunt-and-peck typists plateau around 25 to 30 WPM; you cannot outrun the technique. Second, practice in short, focused sessions — fifteen to thirty minutes a day beats a single exhausting weekend marathon, because muscle memory consolidates between sessions, not during them. Third, and most overlooked, train your weak keys deliberately instead of just taking test after test.</p>
+    <p class="text-slate-300 leading-relaxed mb-4">That third point deserves emphasis because it is where most practice stalls. Speed tests hide weak keys: you compensate with familiar words and never notice that your left pinky fumbles "q" or your right hand hesitates on "p." A targeted drill that forces you to type words packed with your worst keys removes that hiding place. This is why TypeBolt generates a weak-key report after every test — the specific letters you mistyped most — and offers a drill round built from words containing exactly those keys. Five minutes of that kind of deliberate practice improves the keys that were actually holding you back, rather than rehearsing the keys you already type well.</p>
+    <p class="text-slate-300 leading-relaxed mb-4">Fourth, pay attention to ergonomics and rhythm. Sit with your wrists neutral, keep your shoulders relaxed, and aim for an even rhythm rather than bursts of speed followed by pauses. The "consistency" score on your results screen measures exactly this: how steady your speed was across the test. High consistency with moderate speed almost always beats erratic speed, because pauses are where concentration breaks and errors creep in. Finally, use real, varied text. Drilling the same passage repeatedly inflates your score on that passage and nowhere else; a fresh sample of common English words every run, like the one this test generates, keeps the measurement honest.</p>
+
+    <h3 class="text-xl font-bold mt-8 mb-3">Understanding your results: reading the graphs</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">Two of the most useful numbers on your results screen are the ones beginners ignore. The WPM-over-time graph shows your speed sampled throughout the test: a flat or gently rising line means solid, sustainable technique, while a line that starts high and collapses usually means you sprinted, tensed up, and started making mistakes. If your graph sags in the final third of a three-minute test, that is fatigue — and the fix is not more sprinting but more relaxed, longer practice sessions. The consistency percentage distills the same idea into one number: near 100% means metronome-steady typing, while a low number means your speed is coming in bursts.</p>
+    <p class="text-slate-300 leading-relaxed mb-4">The progress history is the other underrated feature. Typing improvement is slow enough that you will not feel it day to day, and that invisibility kills motivation. Saving every attempt and plotting your WPM trend over time turns a vague feeling of "am I getting better?" into a visible line. A realistic expectation: beginners practicing daily can gain 5 to 10 WPM in the first month, then improvement slows to a few WPM per month as technique solidifies. Plateaus of two or three weeks are normal and usually break right after you fix one specific weakness — which is exactly what the weak-key drill is for.</p>
+
+    <h3 class="text-xl font-bold mt-8 mb-3">Test duration: 30 seconds, 1 minute, or 3 minutes?</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">The three durations on this test serve different purposes, so choose based on what you want to learn. Thirty seconds measures your burst speed — useful for quick check-ins and for seeing your ceiling when everything clicks. One minute is the classic standard: long enough that luck evens out, short enough to fit into a coffee break, and the duration most job-screening tests use. Three minutes measures endurance and consistency, and it is the most honest of the three — anyone can sprint for thirty seconds, but three minutes exposes weak technique, tension, and fading concentration. If you are training for a job benchmark, practice mostly at the duration your target test will use, and use the longer tests to build the stamina that makes the short ones feel easy.</p>
+
+    <h3 class="text-xl font-bold mt-8 mb-3">A note on certificates and sharing results</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">The shareable result card on this page exists because typing scores are social: students want to show teachers, freelancers want to show clients, and job seekers want something concrete for a resume. The downloadable PNG card includes your name, WPM, accuracy, and the test date in a clean certificate-style layout, and everything is generated in your browser — no account, no upload, no watermark. Treat it as what it is: a personal record and a practice milestone, not an accredited credential. If an employer asks for proof of typing skill, they will almost always administer their own timed test, which is exactly what the job benchmarks here are designed to prepare you for. Use the card to mark your progress and to set the next target, and let the trend line in your history do the real talking.</p>
+
+    <!-- FAQs -->
+    <div class="mt-10">
+      <h2 class="text-2xl font-extrabold mb-4">Frequently Asked Questions</h2>
+      <div class="space-y-3">
+        <div class="faq-item rounded-xl border border-white/10 bg-[#10142A] overflow-hidden">
+          <button class="faq-q w-full flex items-center justify-between px-5 py-4 text-left font-semibold hover:text-[#FDE047] transition-colors">What is a good typing speed in WPM?<span class="faq-chev text-[#FDE047] transition-transform">&#9662;</span></button>
+          <div class="faq-a px-5 pb-5 text-sm text-slate-300 leading-relaxed">The average adult types around 40 WPM. A good everyday speed is 50–60 WPM, which handles email, documents, and most office work comfortably. Professional territory starts around 65–80 WPM, and transcription or data-entry jobs commonly require 60+ WPM with 95%+ accuracy. Above 90 WPM puts you in the top few percent of typists. Remember that the accuracy figure matters as much as the speed — 55 WPM at 98% accuracy is more useful than 70 WPM at 88%.</div>
+        </div>
+        <div class="faq-item rounded-xl border border-white/10 bg-[#10142A] overflow-hidden">
+          <button class="faq-q w-full flex items-center justify-between px-5 py-4 text-left font-semibold hover:text-[#FDE047] transition-colors">How is WPM calculated on a typing test?<span class="faq-chev text-[#FDE047] transition-transform">&#9662;</span></button>
+          <div class="faq-a px-5 pb-5 text-sm text-slate-300 leading-relaxed">WPM uses a standardized word of five characters, including spaces and punctuation. The formula is: (correct characters ÷ 5) ÷ minutes typed. So 300 correct characters in one minute equals 60 WPM. This standard keeps scores comparable no matter which words appear in the passage. TypeBolt reports net WPM — only correctly typed characters count — which is the honest version of the metric used by employers.</div>
+        </div>
+        <div class="faq-item rounded-xl border border-white/10 bg-[#10142A] overflow-hidden">
+          <button class="faq-q w-full flex items-center justify-between px-5 py-4 text-left font-semibold hover:text-[#FDE047] transition-colors">What typing speed do I need for data entry or transcription jobs?<span class="faq-chev text-[#FDE047] transition-transform">&#9662;</span></button>
+          <div class="faq-a px-5 pb-5 text-sm text-slate-300 leading-relaxed">Data entry postings typically ask for 40–60 WPM at 95%+ accuracy. Clerk-typist and government office exams usually test 50–65 WPM. Medical transcription generally requires at least 60 WPM at very high accuracy, while legal transcription postings often set the bar at 70 WPM. Subtitling and captioning work falls in the 60–80 WPM range. The job-benchmark section of your TypeBolt results grades your score against these real-world requirements automatically.</div>
+        </div>
+        <div class="faq-item rounded-xl border border-white/10 bg-[#10142A] overflow-hidden">
+          <button class="faq-q w-full flex items-center justify-between px-5 py-4 text-left font-semibold hover:text-[#FDE047] transition-colors">How can I increase my typing speed quickly?<span class="faq-chev text-[#FDE047] transition-transform">&#9662;</span></button>
+          <div class="faq-a px-5 pb-5 text-sm text-slate-300 leading-relaxed">There are no real shortcuts, but the fastest reliable path is: learn proper touch typing with all ten fingers, practice 15–30 minutes daily rather than in long marathons, prioritize accuracy over speed (slow down until errors nearly disappear, then speed returns on its own), and drill your weakest keys deliberately instead of just re-taking tests. TypeBolt's weak-key report shows exactly which letters are holding you back, and the targeted drill round builds practice words around them.</div>
+        </div>
+        <div class="faq-item rounded-xl border border-white/10 bg-[#10142A] overflow-hidden">
+          <button class="faq-q w-full flex items-center justify-between px-5 py-4 text-left font-semibold hover:text-[#FDE047] transition-colors">Is the TypeBolt typing certificate valid for job applications?<span class="faq-chev text-[#FDE047] transition-transform">&#9662;</span></button>
+          <div class="faq-a px-5 pb-5 text-sm text-slate-300 leading-relaxed">The downloadable result card is a personal record of your practice — useful for resumes, portfolios, and tracking your own milestones — but it is not an accredited certification, and employers will typically run their own timed test. Use the card to document your progress and the job benchmarks to make sure you are training above the bar for the roles you want. Everything is generated locally in your browser with no signup and no watermark.</div>
+        </div>
+        <div class="faq-item rounded-xl border border-white/10 bg-[#10142A] overflow-hidden">
+          <button class="faq-q w-full flex items-center justify-between px-5 py-4 text-left font-semibold hover:text-[#FDE047] transition-colors">Does backspace affect my accuracy score?<span class="faq-chev text-[#FDE047] transition-transform">&#9662;</span></button>
+          <div class="faq-a px-5 pb-5 text-sm text-slate-300 leading-relaxed">Yes — and that is intentional. TypeBolt counts every keystroke you make, including characters you typed wrong and then corrected with backspace. Your accuracy is correct keystrokes divided by total keystrokes. This keeps the score honest: fixing mistakes still costs time and keystrokes in real work, so a score that ignored corrections would flatter you. If your accuracy is under 92%, treat it as a signal to slow down and rebuild clean technique.</div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What is a good typing speed in WPM?", "acceptedAnswer": { "@type": "Answer", "text": "The average adult types around 40 WPM. A good everyday speed is 50-60 WPM. Professional territory starts around 65-80 WPM, and transcription or data-entry jobs commonly require 60+ WPM with 95%+ accuracy." } },
+      { "@type": "Question", "name": "How is WPM calculated on a typing test?", "acceptedAnswer": { "@type": "Answer", "text": "WPM uses a standardized word of five characters including spaces. The formula is (correct characters / 5) / minutes typed. 300 correct characters in one minute equals 60 WPM." } },
+      { "@type": "Question", "name": "What typing speed do I need for data entry or transcription jobs?", "acceptedAnswer": { "@type": "Answer", "text": "Data entry postings typically ask for 40-60 WPM at 95%+ accuracy. Clerk-typist exams test 50-65 WPM. Medical transcription requires at least 60 WPM, legal transcription often 70 WPM." } },
+      { "@type": "Question", "name": "How can I increase my typing speed quickly?", "acceptedAnswer": { "@type": "Answer", "text": "Learn touch typing with all ten fingers, practice 15-30 minutes daily, prioritize accuracy over speed, and drill your weakest keys deliberately with targeted practice words." } },
+      { "@type": "Question", "name": "Is the TypeBolt typing certificate valid for job applications?", "acceptedAnswer": { "@type": "Answer", "text": "The downloadable result card is a personal record for resumes and portfolios, not an accredited certification. Employers typically run their own timed tests." } },
+      { "@type": "Question", "name": "Does backspace affect my accuracy score?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every keystroke counts, including characters you corrected with backspace. Accuracy is correct keystrokes divided by total keystrokes, which keeps the score honest." } }
+    ]
+  }
+  </script>
+
+  <footer class="max-w-6xl mx-auto mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+    <span class="font-mono2 font-bold text-[#FDE047]">&#9889; TypeBolt</span>
+    <span>Free typing speed test · WPM, accuracy, job benchmarks &amp; drills — no signup, unlimited use.</span>
+    <a href="https://fixoraa.tech" class="hover:text-[#FDE047] transition-colors">More Tools</a>
+  </footer>
+
+<script>
+/*__PURE_START__*/
+/* Pure logic for TypeBolt — no DOM access. Tested with node + vm. */
+var WORDS = [
+"the","be","to","of","and","a","in","that","have","it","for","not","on","with","he","as","you","do","at","this",
+"but","his","by","from","they","we","say","her","she","or","an","will","my","one","all","would","there","their","what","so",
+"up","out","if","about","who","get","which","go","me","when","make","can","like","time","no","just","him","know","take",
+"people","into","year","your","good","some","could","them","see","other","than","then","now","look","only","come","its","over","think",
+"also","back","after","use","two","how","our","work","first","well","way","even","new","want","because","any","these","give","day",
+"most","us","water","long","little","very","after","word","called","just","where","most","much","before","line","right","too","mean",
+"old","any","same","tell","boy","follow","came","want","show","also","around","form","three","small","set","put","end","does",
+"another","well","large","must","big","even","such","because","turn","here","why","ask","went","men","read","need","land","different",
+"home","us","move","try","kind","hand","picture","again","change","off","play","spell","air","away","animal","house","point",
+"page","letter","mother","answer","found","study","still","learn","should","plant","cover","food","sun","four","between","state","keep",
+"eye","never","last","let","thought","city","tree","cross","farm","hard","start","might","story","saw","left","late","run","while",
+"press","close","night","real","life","few","north","open","seem","together","next","white","children","begin","got","walk","example",
+"ease","paper","group","always","music","those","both","mark","often","under","second","carry","took","rain","eat","room","friend",
+"began","idea","fish","mountain","stop","once","base","hear","horse","cut","sure","watch","color","face","wood","main","enough",
+"plain","girl","usual","young","ready","above","ever","red","list","though","feel","talk","bird","soon","body","dog","family",
+"direct","pose","leave","song","measure","door","product","black","short","numeral","class","wind","question","happen","complete","ship",
+"area","half","rock","order","fire","south","problem","piece","told","knew","pass","since","top","whole","king","space","heard",
+"best","hour","better","during","hundred","five","remember","step","early","hold","west","ground","interest","reach","fast","verb",
+"sing","listen","six","table","travel","less","morning","ten","simple","several","vowel","toward","war","lay","against","pattern",
+"slow","center","love","person","money","serve","appear","road","map","science","rule","govern","pull","cold","notice","voice",
+"energy","hunt","probable","bed","brother","egg","ride","cell","believe","fraction","forest","sit","race","window","store","summer",
+"train","sleep","prove","lone","leg","exercise","wall","catch","mount","wish","sky","board","joy","winter","sat","written",
+"wild","instrument","kept","glass","grass","cow","job","edge","sign","visit","past","soft","fun","bright","gas","weather",
+"month","million","bear","finish","happy","hope","flower","clothe","strange","gone","jump","baby","eight","village","meet",
+"root","buy","raise","solve","metal","whether","push","seven","paragraph","third","shall","held","hair","describe","cook","floor",
+"either","result","burn","hill","safe","cat","century","consider","type","law","bit","coast","copy","phrase","silent","tall",
+"sand","soil","roll","temperature","finger","industry","value","fight","lie","beat","excite","natural","view","sense","ear",
+"else","quite","broke","case","middle","kill","son","lake","moment","scale","loud","spring","observe","child","straight",
+"consonant","nation","dictionary","milk","speed","method","organ","pay","age","section","dress","cloud","surprise","quiet","stone",
+"tiny","climb","cool","design","poor","lot","experiment","bottom","key","iron","single","stick","flat","twenty","skin","smile",
+"crease","hole","trade","melody","trip","office","receive","row","mouth","exact","symbol","die","least","trouble","shout",
+"except","wrote","seed","tone","join","suggest","clean","break","lady","yard","rise","bad","blow","oil","blood","touch",
+"grew","cent","mix","team","wire","cost","lost","brown","wear","garden","equal","sent","choose","fell","fit","flow",
+"fair","bank","collect","save","control","decimal","gentle","woman","captain","practice","separate","difficult","doctor","please",
+"protect","noon","whose","locate","ring","character","insect","caught","period","indicate","radio","spoke","atom","human","history",
+"effect","electric","expect","crop","modern","element","student","corner","party","supply","bone","rail","imagine","provide","agree",
+"thus","capital","chair","danger","fruit","rich","thick","soldier","process","operate","guess","necessary","sharp","wing","create",
+"neighbor","wash","bat","rather","crowd","corn","compare","poem","string","bell","depend","meat","rub","tube","famous","dollar",
+"stream","fear","sight","thin","triangle","planet","hurry","chief","colony","clock","mine","tie","enter","major","fresh",
+"search","send","yellow","gun","allow","print","dead","spot","desert","suit","current","lift","rose","continue","block",
+"chart","hat","sell","success","company","subtract","event","particular","deal","swim","term","opposite","wife","shoe","shoulder",
+"spread","arrange","camp","invent","cotton","born","determine","quart","nine","truck","noise","level","chance","gather","shop",
+"stretch","throw","shine","property","column","molecule","select","wrong","gray","repeat","require","broad","prepare","salt",
+"nose","plural","anger","claim","continent","oxygen","sugar","death","pretty","skill","women","season","solution","magnet","silver",
+"thank","branch","match","suffix","especially","fig","afraid","huge","sister","steel","discuss","forward","similar","guide","experience",
+"score","apple","bought","led","pitch","coat","mass","card","band","rope","slip","win","dream","evening","condition","feed",
+"tool","total","basic","smell","valley","nor","double","seat","arrive","master","track","parent","shore","division","sheet",
+"substance","favor","connect","post","spend","chord","fat","glad","original","share","station","dad","bread","charge","proper",
+"bar","offer","segment","slave","duck","instant","market","degree","populate","chick","dear","enemy","reply","drink","occur",
+"support","speech","nature","range","steam","motion","path","liquid","log","meant","quotient","teeth","shell","neck"
+];
+
+var JOBS = [
+  { title: "Data Entry Clerk", wpm: 45, acc: 95, note: "Typical hiring bar: 40-60 WPM at 95%+ accuracy." },
+  { title: "Virtual Assistant", wpm: 50, acc: 95, note: "Remote admin postings usually ask for 50+ WPM." },
+  { title: "Government / Office Clerk", wpm: 55, acc: 96, note: "Clerk-typist exams commonly test 50-65 WPM timed." },
+  { title: "Medical Transcriptionist", wpm: 60, acc: 98, note: "Verbatim work; postings typically require 60+ WPM." },
+  { title: "Subtitler / Captioner", wpm: 65, acc: 97, note: "Caption work demands 60-80 WPM sustained." },
+  { title: "Legal Transcriptionist", wpm: 70, acc: 98, note: "High-stakes verbatim transcription; 70+ WPM bar." }
+];
+
+function sampleWords(words, count, rand) {
+  rand = rand || Math.random;
+  var out = [];
+  if (!words || !words.length || count <= 0) return out;
+  for (var i = 0; i < count; i++) out.push(words[Math.floor(rand() * words.length)]);
+  return out;
+}
+
+function calcWPM(correctChars, elapsedSec) {
+  if (!isFinite(correctChars) || !isFinite(elapsedSec) || elapsedSec <= 0 || correctChars <= 0) return 0;
+  return (correctChars / 5) / (elapsedSec / 60);
+}
+
+function calcAccuracy(correctKeys, totalKeys) {
+  if (!isFinite(correctKeys) || !isFinite(totalKeys) || totalKeys <= 0) return 100;
+  var a = (correctKeys / totalKeys) * 100;
+  if (a < 0) a = 0; if (a > 100) a = 100;
+  return a;
+}
+
+function calcConsistency(samples) {
+  if (!samples || samples.length < 2) return samples && samples.length === 1 ? 100 : 0;
+  var sum = 0, i;
+  for (i = 0; i < samples.length; i++) sum += samples[i];
+  var mean = sum / samples.length;
+  if (mean <= 0) return 0;
+  var sq = 0;
+  for (i = 0; i < samples.length; i++) sq += (samples[i] - mean) * (samples[i] - mean);
+  var sd = Math.sqrt(sq / samples.length);
+  var c = (1 - sd / mean) * 100;
+  if (c < 0) c = 0; if (c > 100) c = 100;
+  return c;
+}
+
+function gradeAgainstJobs(wpm, acc, jobs) {
+  jobs = jobs || JOBS;
+  return jobs.map(function (j) {
+    var wpmOk = wpm >= j.wpm, accOk = acc >= j.acc;
+    return {
+      title: j.title, note: j.note,
+      requiredWpm: j.wpm, requiredAcc: j.acc,
+      wpmOk: wpmOk, accOk: accOk,
+      pass: wpmOk && accOk,
+      wpmGap: Math.max(0, j.wpm - wpm),
+      accGap: Math.max(0, j.acc - acc)
+    };
+  });
+}
+
+function weakKeys(mistakes, limit) {
+  limit = limit || 5;
+  var arr = [];
+  for (var k in mistakes) {
+    if (Object.prototype.hasOwnProperty.call(mistakes, k) && mistakes[k] > 0) arr.push({ key: k, count: mistakes[k] });
+  }
+  arr.sort(function (a, b) { return b.count - a.count || (a.key < b.key ? -1 : 1); });
+  return arr.slice(0, limit);
+}
+
+function buildDrillWords(words, weakKeyArr, count, rand) {
+  rand = rand || Math.random;
+  count = count || 40;
+  var weak = (weakKeyArr || []).map(function (w) { return typeof w === "string" ? w : w.key; })
+    .filter(function (k) { return k && k.length === 1; });
+  if (!weak.length) return sampleWords(words, count, rand);
+  var scored = [];
+  for (var i = 0; i < words.length; i++) {
+    var w = String(words[i]).toLowerCase(), hits = 0;
+    for (var j = 0; j < weak.length; j++) {
+      var idx = -1, c = 0;
+      while ((idx = w.indexOf(weak[j], idx + 1)) !== -1) c++;
+      hits += c;
+    }
+    if (hits > 0) scored.push({ w: words[i], hits: hits });
+  }
+  if (!scored.length) return sampleWords(words, count, rand);
+  scored.sort(function (a, b) { return b.hits - a.hits; });
+  var pool = scored.slice(0, Math.min(scored.length, 80)).map(function (s) { return s.w; });
+  var out = [];
+  for (var n = 0; n < count; n++) out.push(pool[Math.floor(rand() * pool.length)]);
+  return out;
+}
+
+function addHistoryEntry(list, entry, max) {
+  max = max || 50;
+  var l = (list || []).slice();
+  l.unshift(entry);
+  return l.slice(0, max);
+}
+
+function svgEsc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+
+function wpmGraphSvg(samples, w, h) {
+  w = w || 600; h = h || 170;
+  var pad = { l: 34, r: 8, t: 10, b: 20 };
+  var head = '<svg viewBox="0 0 ' + w + ' ' + h + '" class="w-full" role="img" aria-label="WPM over time graph">';
+  if (!samples || !samples.length) {
+    return head + '<text x="' + (w / 2) + '" y="' + (h / 2) + '" text-anchor="middle" fill="#475569" font-size="13" font-family="monospace">start typing to see your live speed graph</text></svg>';
+  }
+  var maxW = 10, i;
+  for (i = 0; i < samples.length; i++) if (samples[i].wpm > maxW) maxW = samples[i].wpm;
+  maxW = Math.ceil(maxW / 10) * 10;
+  var maxT = samples[samples.length - 1].t || 1;
+  var X = function (t) { return pad.l + (t / maxT) * (w - pad.l - pad.r); };
+  var Y = function (v) { return h - pad.b - (v / maxW) * (h - pad.t - pad.b); };
+  var pts = samples.map(function (s) { return X(s.t).toFixed(1) + "," + Y(s.wpm).toFixed(1); }).join(" ");
+  var area = pad.l + "," + (h - pad.b) + " " + pts + " " + X(maxT).toFixed(1) + "," + (h - pad.b);
+  var out = head;
+  out += '<defs><linearGradient id="tbFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDE047" stop-opacity="0.35"/><stop offset="1" stop-color="#FDE047" stop-opacity="0"/></linearGradient></defs>';
+  out += '<line x1="' + pad.l + '" y1="' + (h - pad.b) + '" x2="' + (w - pad.r) + '" y2="' + (h - pad.b) + '" stroke="#334155" stroke-width="1"/>';
+  out += '<text x="2" y="' + (pad.t + 8) + '" fill="#64748B" font-size="10" font-family="monospace">' + maxW + '</text>';
+  out += '<text x="2" y="' + (h - pad.b) + '" fill="#64748B" font-size="10" font-family="monospace">0</text>';
+  out += '<polygon points="' + area + '" fill="url(#tbFill)"/>';
+  out += '<polyline points="' + pts + '" fill="none" stroke="#FDE047" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+  for (i = 0; i < samples.length; i += Math.ceil(samples.length / 12)) {
+    out += '<circle cx="' + X(samples[i].t).toFixed(1) + '" cy="' + Y(samples[i].wpm).toFixed(1) + '" r="2.6" fill="#0B0E1A" stroke="#FDE047" stroke-width="1.5"/>';
+  }
+  out += '<text x="' + (w - pad.r) + '" y="' + (h - 6) + '" text-anchor="end" fill="#64748B" font-size="10" font-family="monospace">' + Math.round(maxT) + 's</text>';
+  out += '</svg>';
+  return out;
+}
+
+function historyTrendSvg(entries, w, h) {
+  w = w || 600; h = h || 150;
+  var pad = { l: 34, r: 8, t: 10, b: 20 };
+  var head = '<svg viewBox="0 0 ' + w + ' ' + h + '" class="w-full" role="img" aria-label="WPM trend over attempts">';
+  var data = (entries || []).slice(0, 20).reverse();
+  if (!data.length) {
+    return head + '<text x="' + (w / 2) + '" y="' + (h / 2) + '" text-anchor="middle" fill="#475569" font-size="13" font-family="monospace">no attempts yet — your WPM trend will appear here</text></svg>';
+  }
+  var maxW = 10, i;
+  for (i = 0; i < data.length; i++) if (data[i].wpm > maxW) maxW = data[i].wpm;
+  maxW = Math.ceil(maxW / 10) * 10;
+  var X = function (i) { return pad.l + (data.length === 1 ? 0.5 : i / (data.length - 1)) * (w - pad.l - pad.r); };
+  var Y = function (v) { return h - pad.b - (v / maxW) * (h - pad.t - pad.b); };
+  var pts = data.map(function (e, i) { return X(i).toFixed(1) + "," + Y(e.wpm).toFixed(1); }).join(" ");
+  var out = head;
+  out += '<text x="2" y="' + (pad.t + 8) + '" fill="#64748B" font-size="10" font-family="monospace">' + maxW + '</text>';
+  out += '<text x="2" y="' + (h - pad.b) + '" fill="#64748B" font-size="10" font-family="monospace">0</text>';
+  out += '<polyline points="' + pts + '" fill="none" stroke="#67E8F9" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+  for (i = 0; i < data.length; i++) {
+    out += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(data[i].wpm).toFixed(1) + '" r="3.4" fill="#0B0E1A" stroke="#67E8F9" stroke-width="1.5"><title>' + Math.round(data[i].wpm) + ' WPM</title></circle>';
+  }
+  out += '<text x="' + (w - pad.r) + '" y="' + (h - 6) + '" text-anchor="end" fill="#64748B" font-size="10" font-family="monospace">last ' + data.length + ' attempts</text>';
+  out += '</svg>';
+  return out;
+}
+
+function resultSummaryText(name, wpm, acc, errs, secs) {
+  var who = name && name.trim() ? name.trim() : "I";
+  return who + " scored " + Math.round(wpm) + " WPM with " + acc.toFixed(1) + "% accuracy (" + errs + " errors) on a " + secs + "s typing test — TypeBolt.";
+}
+
+function fmtClock(sec) {
+  sec = Math.max(0, Math.ceil(sec));
+  var m = Math.floor(sec / 60), s = sec % 60;
+  return m + ":" + (s < 10 ? "0" : "") + s;
+}
+/*__PURE_END__*/
+
+/* ================= DOM / ENGINE (not pure) ================= */
+(function () {
+  "use strict";
+  var HIST_KEY = "typebolt-history-v1";
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+  var duration = 30, isDrill = false;
+  var chars = [], idx = 0;
+  var startT = 0, running = false, finished = false, tickId = 0, lastSample = 0;
+  var samples = [];
+  var keystrokes = { correct: 0, total: 0 };
+  var mistakes = {};
+  var wordErrs = {};
+
+  var passageEl = $("passage"), wrapEl = $("passageWrap"), inputEl = $("focusInput"), overlayEl = $("focusOverlay");
+
+  function wordCountFor(dur) { return dur <= 30 ? 60 : dur <= 60 ? 110 : 260; }
+
+  function buildPassage(list) {
+    var text = list.join(" ");
+    chars = [];
+    var wi = 0;
+    for (var i = 0; i < text.length; i++) {
+      if (text[i] === " ") wi++;
+      chars.push({ ch: text[i], st: "pending", wi: wi });
+    }
+  }
+
+  function renderPassage() {
+    var html = "", i;
+    for (i = 0; i < chars.length; i++) {
+      var c = chars[i];
+      var cls = c.st === "correct" ? "tc-correct" : c.st === "wrong" ? "tc-wrong" : "tc-pending";
+      if (i === idx && !finished) cls += " tc-current";
+      html += '<span class="tc ' + cls + '">' + esc(c.ch) + "</span>";
+    }
+    passageEl.innerHTML = html;
+    var cur = passageEl.children[idx];
+    if (cur && cur.scrollIntoView) {
+      try { cur.scrollIntoView({ block: "nearest", behavior: "auto" }); } catch (e) {}
+    }
+  }
+
+  function extendIfNeeded() {
+    if (idx > chars.length - 80) {
+      var more = sampleWords(WORDS, 60);
+      var text = more.join(" ");
+      var wi = chars.length ? chars[chars.length - 1].wi + 1 : 0;
+      chars.push({ ch: " ", st: "pending", wi: wi });
+      for (var i = 0; i < text.length; i++) {
+        if (text[i] === " ") wi++;
+        chars.push({ ch: text[i], st: "pending", wi: wi });
+      }
+    }
+  }
+
+  function correctChars() {
+    var n = 0;
+    for (var i = 0; i < idx; i++) if (chars[i].st === "correct") n++;
+    return n;
+  }
+
+  function elapsedSec() { return running ? (performance.now() - startT) / 1000 : 0; }
+
+  function updateHUD() {
+    var el = elapsedSec();
+    var wpm = calcWPM(correctChars(), el);
+    var acc = calcAccuracy(keystrokes.correct, keystrokes.total);
+    $("hudWpm").textContent = Math.round(wpm);
+    $("hudAcc").innerHTML = acc.toFixed(1) + '<span class="text-sm">%</span>';
+    $("hudTimer").textContent = fmtClock(duration - el);
+    $("hudErr").textContent = keystrokes.total - keystrokes.correct;
+  }
+
+  function tick() {
+    var el = elapsedSec();
+    updateHUD();
+    if (el - lastSample >= 0.5 || samples.length === 0) {
+      lastSample = el;
+      samples.push({ t: el, wpm: calcWPM(correctChars(), el) });
+      $("liveGraph").innerHTML = wpmGraphSvg(samples);
+      var n = samples.length;
+      $("liveLabel").textContent = n > 1 ? "current " + Math.round(samples[n - 1].wpm) + " WPM" : "WPM over time";
+    }
+    if (el >= duration) finish();
+  }
+
+  function startTimer() {
+    running = true; startT = performance.now(); lastSample = 0;
+    tickId = setInterval(tick, 200);
+    tick();
+  }
+
+  function stopTimer() { running = false; clearInterval(tickId); }
+
+  function typeChar(ch) {
+    if (finished) return;
+    if (!running) startTimer();
+    if (idx >= chars.length) extendIfNeeded();
+    var expected = chars[idx].ch;
+    keystrokes.total++;
+    if (ch === expected) {
+      chars[idx].st = "correct";
+      keystrokes.correct++;
+    } else {
+      chars[idx].st = "wrong";
+      wordErrs[chars[idx].wi] = 1;
+      var k = expected.toLowerCase();
+      if (/^[a-z]$/.test(k)) mistakes[k] = (mistakes[k] || 0) + 1;
+    }
+    idx++;
+    extendIfNeeded();
+    updateHUD();
+    renderPassage();
+    if (inputEl.value) inputEl.value = "";
+  }
+
+  function backspace() {
+    if (finished || idx <= 0) return;
+    idx--;
+    chars[idx].st = "pending";
+    updateHUD();
+    renderPassage();
+  }
+
+  inputEl.addEventListener("beforeinput", function (e) {
+    if (e.inputType === "insertText" && e.data) {
+      e.preventDefault();
+      overlayEl.style.opacity = "0";
+      overlayEl.style.pointerEvents = "none";
+      for (var i = 0; i < e.data.length; i++) typeChar(e.data[i]);
+    } else if (e.inputType === "deleteContentBackward") {
+      e.preventDefault();
+      backspace();
+    }
+  });
+  inputEl.addEventListener("keydown", function (e) {
+    if (e.key === " " ) { /* handled by beforeinput */ }
+    if (e.key === "Tab") e.preventDefault();
+  });
+  inputEl.addEventListener("focus", function () {
+    overlayEl.style.opacity = "0";
+    overlayEl.style.pointerEvents = "none";
+  });
+  inputEl.addEventListener("blur", function () {
+    if (!finished) {
+      overlayEl.style.opacity = "1";
+      overlayEl.style.pointerEvents = "auto";
+      overlayEl.querySelector("div").innerHTML =
+        '<div class="text-[#FDE047] font-bold text-lg mb-1">&#9889; Paused — click to continue</div>' +
+        '<div class="text-slate-400 text-sm">Timer keeps running while you are away</div>';
+    }
+  });
+  wrapEl.addEventListener("click", function () { inputEl.focus(); });
+
+  // Tab+Enter restart + global shortcuts
+  var lastTab = 0;
+  document.addEventListener("keydown", function (e) {
+    var inName = document.activeElement === $("certName");
+    if (e.key === "Tab" && !inName) { e.preventDefault(); lastTab = performance.now(); }
+    if (e.key === "Enter" && performance.now() - lastTab < 900 && !inName) {
+      e.preventDefault();
+      restart(false);
+    }
+    if (e.key === "Escape" && document.activeElement === inputEl) inputEl.blur();
+  });
+
+  function restart(drill) {
+    stopTimer();
+    finished = false; idx = 0; samples = [];
+    keystrokes = { correct: 0, total: 0 };
+    mistakes = {}; wordErrs = {};
+    if (typeof drill === "boolean") isDrill = drill;
+    var list = isDrill
+      ? buildDrillWords(WORDS, lastWeakKeys.length ? lastWeakKeys : ["e", "a", "r"], 40)
+      : sampleWords(WORDS, wordCountFor(duration));
+    buildPassage(list);
+    renderPassage();
+    $("resultsPanel").classList.add("hidden");
+    $("resModeLabel").textContent = isDrill ? "Drill complete" : "Test complete";
+    $("hudWpm").textContent = "0";
+    $("hudAcc").innerHTML = '100<span class="text-sm">%</span>';
+    $("hudTimer").textContent = fmtClock(duration);
+    $("hudErr").textContent = "0";
+    $("liveGraph").innerHTML = wpmGraphSvg([]);
+    $("liveLabel").textContent = "WPM over time";
+    overlayEl.style.opacity = "1";
+    overlayEl.style.pointerEvents = "auto";
+    overlayEl.querySelector("div").innerHTML =
+      '<div class="text-[#FDE047] font-bold text-lg mb-1">&#9889; Click here, then start typing</div>' +
+      '<div class="text-slate-400 text-sm">The timer starts on your first keystroke' + (isDrill ? " · drill: words target your weak keys" : "") + "</div>";
+    if (inputEl.value) inputEl.value = "";
+    inputEl.focus();
+  }
+
+  var lastWeakKeys = [];
+  var lastResult = null;
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+    stopTimer();
+    updateHUD();
+    renderPassage();
+    inputEl.blur();
+
+    var wpm = calcWPM(correctChars(), duration);
+    var acc = calcAccuracy(keystrokes.correct, keystrokes.total);
+    var errs = keystrokes.total - keystrokes.correct;
+    var wpmVals = samples.map(function (s) { return s.wpm; });
+    var cons = calcConsistency(wpmVals);
+    var wordErrCount = Object.keys(wordErrs).length;
+
+    $("resWpm").textContent = Math.round(wpm);
+    $("resAcc").textContent = acc.toFixed(1) + "%";
+    $("resErr").textContent = errs;
+    $("resTime").textContent = duration + "s";
+    $("resCons").textContent = Math.round(cons) + "%";
+    $("resGraph").innerHTML = wpmGraphSvg(samples.length ? samples : [{ t: 0, wpm: 0 }, { t: duration, wpm: wpm }]);
+
+    // Jobs
+    var graded = gradeAgainstJobs(wpm, acc);
+    var passed = graded.filter(function (g) { return g.pass; }).length;
+    var v = $("jobsVerdict");
+    if (passed === graded.length) {
+      v.className = "rounded-xl px-4 py-3 mb-3 text-sm font-semibold bg-emerald-400/10 border border-emerald-400/40 text-emerald-300";
+      v.textContent = "\u2705 You clear all " + graded.length + " job benchmarks — outstanding!";
+    } else if (passed > 0) {
+      v.className = "rounded-xl px-4 py-3 mb-3 text-sm font-semibold bg-[#FDE047]/10 border border-[#FDE047]/40 text-[#FDE047]";
+      v.textContent = "You clear " + passed + " of " + graded.length + " job benchmarks. Keep pushing for the rest.";
+    } else {
+      v.className = "rounded-xl px-4 py-3 mb-3 text-sm font-semibold bg-red-400/10 border border-red-400/40 text-red-300";
+      v.textContent = "Not clearing any benchmark yet — that is exactly what practice is for. Run a drill below.";
+    }
+    $("jobsTable").innerHTML = graded.map(function (g) {
+      var badge = g.pass
+        ? '<span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-400/15 text-emerald-300 border border-emerald-400/40">PASS</span>'
+        : '<span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-red-400/10 text-red-300 border border-red-400/40">NOT YET</span>';
+      var you = Math.round(wpm) + " WPM · " + acc.toFixed(1) + "%";
+      var need = g.requiredWpm + "+ WPM · " + g.requiredAcc + "%+";
+      var gap = "";
+      if (!g.pass) {
+        var bits = [];
+        if (g.wpmGap > 0) bits.push("+" + Math.ceil(g.wpmGap) + " WPM");
+        if (g.accGap > 0) bits.push("+" + g.accGap.toFixed(1) + "% acc");
+        gap = '<div class="text-[11px] text-slate-500">needs ' + bits.join(" & ") + "</div>";
+      }
+      return '<tr class="border-t border-white/5">' +
+        '<td class="px-4 py-3"><div class="font-semibold">' + esc(g.title) + '</div><div class="text-[11px] text-slate-500">' + esc(g.note) + "</div></td>" +
+        '<td class="px-4 py-3 font-mono2 text-xs">' + need + "</td>" +
+        '<td class="px-4 py-3 font-mono2 text-xs">' + you + gap + "</td>" +
+        '<td class="px-4 py-3">' + badge + "</td></tr>";
+    }).join("");
+
+    // Weak keys
+    lastWeakKeys = weakKeys(mistakes, 5);
+    var wk = $("weakKeysList");
+    if (!lastWeakKeys.length) {
+      wk.innerHTML = '<span class="text-sm text-slate-400">Flawless run — no mistyped letters to report. \uD83C\uDFC6</span>';
+    } else {
+      wk.innerHTML = lastWeakKeys.map(function (w, i) {
+        var medal = i === 0 ? " border-[#FDE047]/60 text-[#FDE047]" : " border-white/15 text-slate-200";
+        return '<div class="flex items-center gap-2 hud-card rounded-xl px-3 py-2' + medal + ' border">' +
+          '<span class="kbd">' + esc(w.key.toUpperCase()) + "</span>" +
+          '<span class="text-xs text-slate-400">' + w.count + " miss" + (w.count === 1 ? "" : "es") + "</span></div>";
+      }).join("");
+    }
+
+    // Certificate card
+    var nm = $("certName").value;
+    $("certCardName").textContent = nm && nm.trim() ? nm.trim() : "Your Name";
+    var d = new Date();
+    $("certCardDate").textContent = d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) + " · " + duration + "s test";
+    $("certCardWpm").textContent = Math.round(wpm);
+    $("certCardAcc").textContent = acc.toFixed(1) + "%";
+    lastResult = { wpm: wpm, acc: acc, errs: errs, wordErrs: wordErrCount };
+
+    // History
+    saveHistory({ ts: Date.now(), wpm: Math.round(wpm * 10) / 10, acc: Math.round(acc * 10) / 10, errs: errs, secs: duration, mode: isDrill ? "drill" : "test" });
+    renderHistory();
+
+    $("resultsPanel").classList.remove("hidden");
+    $("resultsPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function loadHistory() {
+    try {
+      var raw = localStorage.getItem(HIST_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) { return []; }
+  }
+  function saveHistory(entry) {
+    var h = addHistoryEntry(loadHistory(), entry, 50);
+    try { localStorage.setItem(HIST_KEY, JSON.stringify(h)); } catch (e) {}
+  }
+  function renderHistory() {
+    var h = loadHistory();
+    $("historyGraph").innerHTML = historyTrendSvg(h);
+    if (!h.length) {
+      $("historyTable").innerHTML = '<p class="text-slate-500 text-sm">No attempts yet. Finish a test and it will be saved here automatically.</p>';
+      return;
+    }
+    var rows = h.slice(0, 10).map(function (e) {
+      var dt = new Date(e.ts);
+      var when = dt.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + " " + dt.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+      var mode = e.mode === "drill" ? '<span class="text-[#67E8F9]">drill</span>' : "test";
+      return '<div class="flex items-center justify-between py-2 border-b border-white/5">' +
+        '<span class="text-slate-400 text-xs">' + esc(when) + " · " + mode + " · " + e.secs + "s</span>" +
+        '<span class="font-mono2 text-sm"><span class="text-[#FDE047] font-bold">' + e.wpm + " WPM</span>" +
+        '<span class="text-slate-500"> · ' + e.acc + "% · " + e.errs + " err</span></span></div>";
+    }).join("");
+    var best = h.reduce(function (m, e) { return e.wpm > m ? e.wpm : m; }, 0);
+    $("historyTable").innerHTML =
+      '<div class="text-xs text-slate-500 mb-2">Personal best: <span class="text-[#FDE047] font-bold font-mono2">' + best + " WPM</span> · " + h.length + " attempt" + (h.length === 1 ? "" : "s") + " saved</div>" + rows;
+  }
+  $("historyClear").addEventListener("click", function () {
+    try { localStorage.removeItem(HIST_KEY); } catch (e) {}
+    renderHistory();
+  });
+
+  // Certificate: name input live-update
+  $("certName").addEventListener("input", function () {
+    $("certCardName").textContent = this.value.trim() || "Your Name";
+  });
+
+  // Certificate: download PNG via canvas
+  $("certDownload").addEventListener("click", function () {
+    if (!lastResult) return;
+    var W = 1200, H = 630;
+    var cv = document.createElement("canvas");
+    cv.width = W; cv.height = H;
+    var c = cv.getContext("2d");
+    c.fillStyle = "#0B0E1A"; c.fillRect(0, 0, W, H);
+    // stripes
+    c.fillStyle = "#FDE047";
+    for (var x = -H; x < W; x += 56) {
+      c.save(); c.translate(x, 0); c.rotate(Math.PI / 4);
+      c.fillRect(0, -40, 28, 40); c.fillRect(0, H, 28, 40);
+      c.restore();
+    }
+    c.strokeStyle = "rgba(253,224,71,0.5)"; c.lineWidth = 3;
+    c.strokeRect(34, 34, W - 68, H - 68);
+    c.textAlign = "center";
+    c.fillStyle = "#FDE047";
+    c.font = "800 54px ui-monospace, Menlo, monospace";
+    c.fillText("\u26A1 TypeBolt", W / 2, 150);
+    c.fillStyle = "#64748B";
+    c.font = "600 24px ui-sans-serif, system-ui, sans-serif";
+    c.fillText("T Y P I N G   S P E E D   C E R T I F I C A T E", W / 2, 200);
+    c.fillStyle = "#F8FAFC";
+    c.font = "700 64px ui-sans-serif, system-ui, sans-serif";
+    var nm = $("certName").value.trim() || "Your Name";
+    c.fillText(nm.slice(0, 40), W / 2, 300);
+    c.fillStyle = "#94A3B8"; c.font = "400 26px ui-sans-serif, system-ui, sans-serif";
+    c.fillText(new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }), W / 2, 348);
+    c.fillStyle = "#FDE047"; c.font = "800 96px ui-monospace, Menlo, monospace";
+    c.fillText(Math.round(lastResult.wpm) + " WPM", W / 2 - 170, 480);
+    c.fillStyle = "#67E8F9";
+    c.fillText(lastResult.acc.toFixed(1) + "%", W / 2 + 190, 480);
+    c.fillStyle = "#64748B"; c.font = "400 22px ui-sans-serif, system-ui, sans-serif";
+    c.fillText("A C C U R A C Y", W / 2 + 190, 516);
+    c.fillText("S P E E D", W / 2 - 170, 516);
+    c.font = "400 20px ui-sans-serif, system-ui, sans-serif";
+    c.fillText("For practice & self-assessment", W / 2, 580);
+    var a = document.createElement("a");
+    a.download = "typebolt-certificate.png";
+    a.href = cv.toDataURL("image/png");
+    document.body.appendChild(a); a.click(); a.remove();
+    $("certMsg").textContent = "Certificate downloaded.";
+    setTimeout(function () { $("certMsg").textContent = ""; }, 3000);
+  });
+
+  // Certificate: copy text
+  $("certCopy").addEventListener("click", function () {
+    if (!lastResult) return;
+    var txt = resultSummaryText($("certName").value, lastResult.wpm, lastResult.acc, lastResult.errs, duration);
+    function done(ok) {
+      $("certMsg").textContent = ok ? "Result copied to clipboard." : "Copy failed — select the text manually.";
+      setTimeout(function () { $("certMsg").textContent = ""; }, 3000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { done(true); }, function () { done(false); });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = txt; document.body.appendChild(ta); ta.select();
+      try { done(document.execCommand("copy")); } catch (e) { done(false); }
+      ta.remove();
+    }
+  });
+
+  // Drill
+  $("drillBtn").addEventListener("click", function () {
+    duration = 30;
+    syncDurButtons();
+    restart(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // Duration buttons
+  function syncDurButtons() {
+    var btns = document.querySelectorAll(".dur-btn");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle("active", parseInt(btns[i].getAttribute("data-dur"), 10) === duration);
+    }
+  }
+  var btns = document.querySelectorAll(".dur-btn");
+  for (var bi = 0; bi < btns.length; bi++) {
+    btns[bi].addEventListener("click", function () {
+      duration = parseInt(this.getAttribute("data-dur"), 10);
+      syncDurButtons();
+      restart(false);
+    });
+  }
+  $("restartBtn").addEventListener("click", function () { restart(false); });
+
+  // FAQ accordion
+  var faqs = document.querySelectorAll(".faq-item");
+  for (var fi = 0; fi < faqs.length; fi++) {
+    faqs[fi].querySelector(".faq-q").addEventListener("click", function () {
+      this.closest(".faq-item").classList.toggle("open");
+    });
+  }
+
+  // Init
+  buildPassage(sampleWords(WORDS, wordCountFor(duration)));
+  renderPassage();
+  $("liveGraph").innerHTML = wpmGraphSvg([]);
+  renderHistory();
+})();
+</script>
+</body>
+</html>
